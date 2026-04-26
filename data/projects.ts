@@ -22,7 +22,7 @@ export const projects = [
     title: "Портфолио",
     description: "Мое портфолио",
     image: PortfolioImage,
-    link: "http://localhost:3000/portfolio",
+    link: "portfolio-one-zeta-3jif0mk2g7.vercel.app",
     githubLink: "https://github.com/nvkmaksim/Portfolio.git",
     isUnderConstruction: false,
   },
