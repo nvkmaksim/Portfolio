@@ -82,7 +82,7 @@ export default function Header() {
               {Socials.map((item, index) => (
                 <div key={index} className="flex flex-row items-center gap-3">
                   <a
-                    className="bg-(--color-secondary) border-(--color-border) border-1 rounded-xl p-2"
+                    className="bg-(--color-secondary) border-(--color-border) border rounded-xl p-2"
                     href={item.Link}
                   >
                     <Image
