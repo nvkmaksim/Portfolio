@@ -1,0 +1,661 @@
+====================
+Directory Tree (selected)
+====================
+
+portfolio-site/
+├── actions/
+│   └── send-message.tsx
+├── app/
+│   ├── about/
+│   │   └── page.tsx
+│   ├── contact/
+│   │   └── page.tsx
+│   ├── portfolio/
+│   │   └── page.tsx
+│   ├── resume/
+│   │   └── page.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+└── components/
+    ├── footer.tsx
+    ├── header.tsx
+    └── theme-toggle.tsx
+
+--------------------
+File: /portfolio-site/components/footer.tsx
+--------------------
+
+import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <nav className="fixed bottom-0 left-0 bg-(--color-bg)/30 backdrop-blur-sm w-full border-b-0 rounded-b-none p-4 px-10">
+      <div className="flex flex-row justify-between">
+        <Link href={"/about"}>Про меня</Link>
+        <Link href={"/resume"}>Резюме</Link>
+        <Link href={"/portfolio"}>Портфолио</Link>
+        <Link href={"/contact"}>Связаться</Link>
+      </div>
+    </nav>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/components/header.tsx
+--------------------
+
+"use client";
+import Image from "next/image";
+import MyPhoto from "@/public/images/my-photo.jpg";
+import { Socials } from "@/data/socials";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Import, Mail, MapPin, Phone } from "lucide-react";
+import { usePathname } from "next/navigation";
+import ThemeToggle from "./theme-toggle";
+export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isContact, setIsContact] = useState(false);
+  const pathname = usePathname();
+  useEffect(() => {
+    if (pathname == "/contact") {
+      setIsContact(true);
+      setIsOpen(true);
+    } else {
+      setIsContact(false);
+      setIsOpen(false);
+    }
+  }, [pathname]);
+
+  return (
+    <section className="flex flex-col border rounded-2xl shadow-sm p-4">
+      <div className="flex flex-row gap-4 items-center relative">
+        <Image
+          className="rounded-full object-cover"
+          src={MyPhoto}
+          alt="My photo"
+          width={64}
+          height={64}
+        />
+        <div className="flex flex-col">
+          <h1 className="text-(--color-text) text-xl font-bold">
+            Новиков Максим
+          </h1>
+          <p className="text-(--color-text-secondary)">Веб-разработчик</p>
+        </div>
+        <motion.div
+          animate={{ rotate: isOpen ? -180 : 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="absolute bottom-0 right-0"
+        >
+          <div className="flex flex-row">
+            {!isContact && (
+              <div onClick={() => setIsOpen(!isOpen)}>
+                <ChevronDown />
+              </div>
+            )}
+          </div>
+        </motion.div>
+        <div className="absolute top-0 right-0">
+          <ThemeToggle />
+        </div>
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-col gap-4 overflow-hidden"
+          >
+            <div className="flex flex-col pt-4 gap-5">
+              <div className="flex flex-col gap-2">
+                {Socials.map((item, index) => (
+                  <div key={index} className="flex flex-row items-center gap-3">
+                    <a
+                      className="bg-(--color-secondary) border-(--color-border) border-1 rounded-xl p-2"
+                      href={item.Link}
+                    >
+                      <Image
+                        className="invert w-5 h-5"
+                        src={item.Icon}
+                        alt={item.Name}
+                      />
+                    </a>
+                    <a
+                      href={item.Link}
+                      className="hover:font-bold hover:underline"
+                    >
+                      {item.Text}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/components/theme-toggle.tsx
+--------------------
+
+"use client"; // Это клиентский компонент для работы с браузером
+
+import { useEffect, useState } from "react";
+
+export default function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  // При загрузке проверяем, была ли сохранена тема ранее
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add("dark");
+      setIsDark(true);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setIsDark(true);
+    }
+  };
+
+  return <button onClick={toggleTheme}>{isDark ? "🌙" : "☀️"}</button>;
+}
+
+
+--------------------
+File: /portfolio-site/app/globals.css
+--------------------
+
+@import "tailwindcss";
+
+:root {
+  --spacing-sm: 1rem;
+  --spacing-md: 5rem;
+  --spacing-lg: 10rem;
+
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #4e4e4e;
+  --color-main: #f2decb;
+  --color-secondary: #e5b486;
+  --color-border: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: white) {
+  :root {
+    --color-bg: #0a0a0a;
+    --color-text: #ededed;
+    --color-text-secondary: #c7c7c7;
+    --color-main: #1b1b1f;
+    --color-secondary: #2b2b30;
+    --color-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  section {
+    padding: 2rem;
+    background-color: var(--color-main);
+    border-radius: 1rem;
+    border: 2px solid var(--color-border);
+  }
+}
+
+@layer utilities {
+  /* Разворачиваем карточку */
+  .flip-y {
+    transform: rotateY(180deg);
+  }
+}
+
+
+--------------------
+File: /portfolio-site/app/layout.tsx
+--------------------
+
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Roboto } from "next/font/google";
+import "./globals.css";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
+});
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Create Next App",
+  description: "Generated by create next app",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={` ${roboto.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col gap-5 p-5">
+        <header>
+          <Header />
+        </header>
+        <div className="flex-1 mb-10">{children}</div>
+        <footer>
+          <Footer />
+        </footer>
+        {/* Тостконтейнер использует <section>, которому я настроил глобальные стили, из-за чего его видно на экране. Проще всего убрать за экран */}
+        <div className="absolute -left-100">
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            pauseOnHover
+            theme="dark"
+          />
+        </div>
+      </body>
+    </html>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/app/page.tsx
+--------------------
+
+export default function Home() {
+  return <div></div>;
+}
+
+
+--------------------
+File: /portfolio-site/app/resume/page.tsx
+--------------------
+
+import Image from "next/image";
+import EducationIcon from "@/public/images/education.png";
+import WorkIcon from "@/public/images/work.png";
+
+export default function Resume() {
+  return (
+    <section className="flex flex-col gap-(--spacing-sm)">
+      <h2 className="font-bold text-3xl tracking-tight mb-4">Резюме</h2>
+      <div className="flex flex-col gap-(--spacing-md)">
+        <article className="relative flex flex-col gap-(--spacing-sm)">
+          <div className="relative pl-12">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10  bg-(--color-secondary) rounded-xl flex items-center justify-center border border-(--color-border) shadow-sm">
+              <Image
+                className="invert w-5 h-5 opacity-80"
+                src={EducationIcon}
+                alt="Education"
+              />
+            </div>
+            <h3 className="font-bold text-xl uppercase tracking-wider text-(--color-text)">
+              Образование
+            </h3>
+          </div>
+
+          <div className="relative ml-[19px] border-l border-(--color-secondary) flex flex-col gap-(--spacing-md) pl-10">
+            <div className="relative">
+              <div className="absolute -left-[45px] top-2 w-2.5 h-2.5 rounded-full border-2 text-(--color-secondary) shadow-[0_0_10px_rgba(255, 255, 255)]" />
+
+              <h4 className="font-bold text-lg text-(--color-text)">
+                Елабужский институт КФУ
+              </h4>
+              <p className="text-(--color-text-secondary) mt-1">
+                Прикладная информатика
+              </p>
+              <p className="text-(--color-text-secondary) text-sm mt-1">
+                2022 — 2027 (Заочно)
+              </p>
+            </div>
+
+            <div className="relative">
+              <div className="absolute text-(--color-secondary) -left-[45px] top-2 w-2.5 h-2.5 rounded-full border-2 shadow-[0_0_10px_rgba(255, 255, 255)]" />
+
+              <h4 className="font-bold text-lg  text-(--color-text)">КГАМТ</h4>
+              <p className="text-(--color-text-secondary) mt-1">
+                Программная инженерия
+              </p>
+              <p className="text-(--color-text-secondary) text-sm mt-1">
+                2018 — 2022 (Очно)
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article className="relative flex flex-col gap-(--spacing-sm)">
+          <div className="relative pl-12">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-(--color-secondary) rounded-xl flex items-center justify-center border  border-(--color-secondary) shadow-sm">
+              <Image
+                className="invert w-5 h-5 opacity-80"
+                src={WorkIcon}
+                alt="Work"
+              />
+            </div>
+            <h3 className="font-bold text-xl uppercase tracking-wider  text-(--color-text)">
+              Опыт работы
+            </h3>
+          </div>
+
+          <div className="relative ml-[19px] border-l border-(--color-secondary) flex flex-col gap-(--spacing-md) pl-10">
+            <div className="relative">
+              <div className="absolute -left-[45px] top-2 w-2.5 h-2.5 rounded-full border-2  border-(--color-secondary)" />
+
+              <h4 className="font-bold text-lg text-(--color-text)">ГНИВЦ</h4>
+              <p className="text-(--color-text-secondary) mt-1">
+                Системный аналитик
+              </p>
+              <p className="text-(--color-text-secondary) text-sm mt-1">
+                2024 — 2026
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/app/portfolio/page.tsx
+--------------------
+
+import Image from "next/image";
+import PortfolioImage from "@/public/images/portfolio-image.gif";
+import UnderConstractionImage from "@/public/images/under-construction.png";
+
+export default function Portfolio() {
+  return (
+    <section className="flex flex-col gap-(--spacing-sm)">
+      <h2 className=" font-bold text-3xl tracking-tight mb-4">Портфолио</h2>
+      <div className="flex flex-col gap-(--spacing-sm)">
+        <article>
+          <div className="relative">
+            <Image
+              src={UnderConstractionImage}
+              alt="Culin"
+              className="w-full h-55 brightness-50 rounded-2xl"
+            />
+            <span className="text-(--color-white)/30 absolute -rotate-20 text-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap">
+              В разработке
+            </span>
+          </div>
+
+          <h4 className="font-bold text-lg text-(--color-text) mt-2">
+            Неизвестно
+          </h4>
+          <p className="text-(--color-text-secondary)">
+            Интернет магазин handmade подарков
+          </p>
+        </article>
+        <article>
+          <div className="relative">
+            <Image
+              src={UnderConstractionImage}
+              alt="Culin"
+              className="w-full h-55 brightness-50 rounded-2xl"
+            />
+            <span className="text-(--color-white)/30 absolute -rotate-20 text-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap">
+              В разработке
+            </span>
+          </div>
+
+          <h4 className="font-bold text-lg text-(--color-text) mt-2">Culin</h4>
+          <p className="text-(--color-text-secondary)">
+            Соцсеть/помощник для кулинаров
+          </p>
+        </article>
+        <article>
+          <Image
+            src={PortfolioImage}
+            alt="Culin"
+            className="w-full h-55 rounded-2xl"
+          />
+          <h4 className="font-bold text-lg text-(--color-text) mt-2">
+            Портфолио
+          </h4>
+          <p className="text-(--color-text-secondary)">Мое портфолио</p>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/app/contact/page.tsx
+--------------------
+
+"use client";
+import Image from "next/image";
+import { useRef } from "react";
+import SendIcon from "@/public/images/send.png";
+import { sendMessage } from "@/actions/send-message";
+import { toast } from "react-toastify";
+
+export default function ContactForm() {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  return (
+    <section className="flex flex-col flex-1 gap-(--spacing-md)">
+      <div className="flex flex-col gap-(--spacing-sm)">
+        <h2 className="text-(--color-text) text-2xl font-bold relative inline-block">
+          Контакт
+        </h2>
+
+        <div className="w-full h-48 rounded-2xl overflow-hidden">
+          <iframe
+            src="https://yandex.ru/map-widget/v1/?um=constructor%3Ad41bf4e94e4f97dab5119165b6dbf7dc5ed7ba30b922de5dc1f54dca6ac0392c&amp;source=constructor"
+            className="w-full h-full"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      <div>
+        <h3 className="text-(--color-text) text-xl font-bold mb-6">
+          Контактная форма
+        </h3>
+
+        <form
+          id="contact-form"
+          ref={formRef}
+          action={async (formData) => {
+            toast("hello");
+            const result = await sendMessage(formData);
+            if (result.success) {
+              toast.success("Сообщение отправлено!");
+              formRef.current?.reset();
+            } else {
+              toast.error("Не удалось отправить сообщение!");
+            }
+          }}
+          className="flex flex-col gap-(--spacing-sm)"
+        >
+          <input
+            name="name"
+            type="text"
+            placeholder="Имя"
+            required
+            className="w-full bg-transparent border border-(--color-border) rounded-xl px-4 py-3 text-(--color-text) placeholder:text-(--color-text-secondary) focus:outline-none focus:border-(--color-text)/20 transition-colors"
+          />
+
+          <input
+            name="subject"
+            type="text"
+            placeholder="Тема"
+            className="w-full border border-(--color-border) rounded-xl px-4 py-3 text-(--color-text) placeholder:text-(--color-text-secondary) focus:outline-none focus:border-(--color-text)/20 transition-colors"
+          />
+
+          <textarea
+            name="message"
+            rows={5}
+            placeholder="Ваше сообщение"
+            required
+            className="w-full bg-transparent border border-(--color-border) rounded-xl px-4 py-3 text-(--color-text) placeholder:text-(--color-text-secondary) focus:outline-none focus:border-(--color-text)/20 transition-colors"
+          />
+          <button
+            type="submit"
+            className="mt-2 flex items-center justify-center gap-2 w-full bg-(--color-secondary)/50 border border-(--color-border) py-4 rounded-xl font-medium hover:bg-(--color-text)/20 transition-all active:scale-[1]"
+          >
+            <Image className="invert w-5 h-5" src={SendIcon} alt="Send icon" />
+            <span>Отправить сообщение</span>
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/app/about/page.tsx
+--------------------
+
+export default function About() {
+  return (
+    <section className="flex flex-col gap-(--spacing-md)">
+      {/* Секция: Про меня */}
+      <article className="flex flex-col gap-(--spacing-sm)">
+        <h2 className="font-bold text-2xl tracking-tight">Про меня</h2>
+        <div className="flex flex-col gap-1">
+          <p>
+            Специализируюсь на создании современных веб-приложений и интерфейсов
+            на Expo и Next.js. Люблю создавать кроссплатформенные решения с
+            единой логикой.
+          </p>
+          <p>
+            Сейчас я активно углубляюсь и интегрирую методы машинного обучения и
+            компьютерного зрения в свои проекты, стремясь превращать стандартные
+            интерфейсы в интеллектуальные инструменты.
+          </p>
+          <p>
+            Ранее занимался разработкой игр на Unity, что привило мне любовь к
+            работе с графикой и оптимизацией. Продолжаю заниматься геймдевом в
+            качестве хобби.
+          </p>
+        </div>
+      </article>
+
+      {/* Секция: Стек */}
+      <article className="flex flex-col gap-(--spacing-sm)">
+        <h2 className="font-bold text-2xl">Стек</h2>
+        <div className="flex flex-wrap gap-1">
+          {[
+            "Next.js",
+            "React Native",
+            "Tailwind",
+            "Supabase (PostgreSQL)",
+            "FastAPI",
+            "PyTorch",
+            "Python",
+            "Typescript",
+            "Zustand",
+            "Cursor",
+          ].map((tech) => (
+            <span
+              key={tech}
+              className="px-3 py-1 border bg-(--color-secondary) border-(--color-border) rounded-full text-sm font-medium"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </article>
+    </section>
+  );
+}
+
+
+--------------------
+File: /portfolio-site/actions/send-message.tsx
+--------------------
+
+"use server";
+
+export async function sendMessage(formData: FormData) {
+  const nodemailer = require("nodemailer");
+  const name = formData.get("name");
+  const subject = formData.get("subject") || "Без темы";
+  const message = formData.get("message");
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.GMAIL_HOST,
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
+    },
+  });
+
+  const messageOptions = {
+    from: process.env.GMAIL_USER,
+    to: "novimaks80@gmail.com",
+    subject: `Сообщение: ${subject}`,
+    text: `От: ${name} \n${message}`,
+    html: `
+      <h3>Новое сообщение с портфолио</h3>
+      <p><b>Отправитель:</b> ${name}</p>
+      <p><b>Тема:</b> ${subject}</p>
+      <p><b>Сообщение:</b></p>
+      <p>${message}</p>
+      <hr />
+      <p>Дата: ${new Date().toLocaleString("ru-RU")}</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(messageOptions);
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { success: false };
+  }
+}
+
+
