@@ -1,33 +1,34 @@
 export default function About() {
   return (
     <section className="flex flex-col gap-(--spacing-md)">
-      {/* Секция: Про меня */}
       <article className="flex flex-col gap-(--spacing-sm)">
         <h2 className="font-bold text-2xl tracking-tight">Про меня</h2>
-        <div className="flex flex-col gap-1">
-          <p>
+        <div className="flex flex-col gap-5 text-lg leading-snug max-w-3xl">
+          <p className="font-medium">
             Студент 4 курса (заочное обучение), Fullstack-разработчик с фокусом
-            на Frontend.
+            на frontend.
           </p>
+
           <p>
             Специализируюсь на создании кроссплатформенных экосистем для веба и
-            mobile (Next.js + Expo). Мой подход - это полный цикл разработки: от
-            проектирования UI/UX макетов до финального деплоя и настройки
-            серверной части.
+            mobile <span className="font-semibold">(Next.js + Expo)</span>. Мой
+            подход - это полный цикл разработки: от проектирования UI/UX макетов
+            до финального деплоя и настройки серверной части.
           </p>
+
           <p>
-            Активно внедряю ML-решения в веб-интерфейсы, используя FastAPI +
-            PyTorch.
+            Активно внедряю ML-решения в веб-интерфейсы, используя{" "}
+            <span className="font-semibold">FastAPI + PyTorch</span>.
           </p>
-          <p>
+
+          <p className="border-l-4 pl-4 italic">
             Стремлюсь к работе в средней/крупной компании для освоения
-            Enterprise-практик, которые могут мне в развиваться и создавать
-            действительно качественные и нужные продукты.
+            Enterprise-практик, которые помогут мне развиваться и создавать
+            действительно качественные и нужные людям продукты.
           </p>
         </div>
       </article>
 
-      {/* Секция: Стек */}
       <article className="flex flex-col gap-(--spacing-sm)">
         <h2 className="font-bold text-2xl">Стек</h2>
         <div className="flex flex-wrap gap-1">
