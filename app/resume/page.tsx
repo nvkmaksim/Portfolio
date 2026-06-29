@@ -5,7 +5,7 @@ import WorkIcon from "@/public/images/work.png";
 export default function Resume() {
   return (
     <section className="flex flex-col gap-(--spacing-sm)">
-      <h2 className="font-bold text-3xl tracking-tight mb-4">Резюме</h2>
+      <h2 className="font-bold text-2xl tracking-tight mb-4">Резюме</h2>
       <div className="flex flex-col gap-(--spacing-md)">
         <article className="relative flex flex-col gap-(--spacing-sm)">
           <div className="relative pl-12">
