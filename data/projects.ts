@@ -1,6 +1,7 @@
 import PortfolioImage from "@/public/images/portfolio-image.gif";
 import UnderConstractionImage from "@/public/images/under-construction.png";
 import BoilerPlateImage from "@/public/images/boilerplate.jpg";
+import CulinImage from "@/public/images/culin.png";
 import { StaticImageData } from "next/image";
 
 export interface Project {
@@ -84,12 +85,12 @@ export const projects: Project[] = [
     description: "Высоконагруженная соцсеть и ИИ-помощник для кулинаров",
     fullDescription:
       "Масштабируемая социальная сеть со сложной архитектурой бэкенд-API и кроссплатформенным клиентом. Оптимизировал пайплайн обработки и сжатия пользовательского медиаконтента для снижения нагрузки на хранилище. Реализовал асинхронное взаимодействие для real-time компонентов. Спроектировал расширяемый интерфейс API под интеграцию интеллектуального голосового ИИ-ассистента для сценариев hands-free.",
-    image: UnderConstractionImage,
+    image: CulinImage,
     link: "",
     githubLink: "https://github.com/nvkmaksim/Culin",
     figmaLink:
       "https://www.figma.com/design/L0cAuqaPyzyZmPJCrNwPqO/Culin?node-id=315-777&t=MZxmSjOMbVRxSpSv-1",
-    isUnderConstruction: true,
+    isUnderConstruction: false,
     stack: [
       "FastAPI",
       "SQLAlchemy",
@@ -109,7 +110,7 @@ export const projects: Project[] = [
     title: "Портфолио",
     description: "Высокопроизводительный персональный сайт-портфолио",
     fullDescription:
-      "Современное SPA/SSR приложение, разработанное на Next.js с упором на производительность и UX. Дизайн реализован в строгом минимализме на базе CSS-переменных, обеспечивающих динамическое переключение тем оформления. Проект полностью оптимизирован для достижения максимальных показателей Core Web Vitals (близких к 100/100 в Lighthouse) и плавных UI-интерфейсных анимаций.",
+      "Современное SPA/SSR приложение, разработанное на Next.js с упором на производительность и UX. Дизайн реализован в строгом минимализме на базе CSS-переменных, обеспечивающих динамическое переключение тем оформления. Проект заделывался под адаптивность и юзер-френдли интерфейс.",
     image: PortfolioImage,
     link: "https://portfolio-one-zeta-3jif0mk2g7.vercel.app",
     githubLink: "https://github.com/nvkmaksim/Portfolio.git",
